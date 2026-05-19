@@ -144,16 +144,15 @@
       white-space:nowrap;
     }
 
-  
-     .date-scratch-box strong{
-  font-size:clamp(22px, 8vw, 34px);
-  white-space:nowrap;
-}
-
-.date-reveal-item:nth-child(2) .date-scratch-box strong{
-  font-size:clamp(18px, 6vw, 26px);
-}
-    
+    .date-scratch-box strong{
+      position:relative;
+      z-index:1;
+      font-size:clamp(34px, 5vw, 64px);
+      font-weight:400;
+      line-height:1;
+      color:var(--dark-color);
+      text-align:center;
+    }
 
     .date-scratch-canvas{
       position:absolute;
@@ -504,7 +503,240 @@
         font-size:clamp(20px, 7.5vw, 30px);
       }
     }
+.timeline-card{
+  padding:clamp(34px, 6vw, 70px);
+  text-align:center;
+}
 
+.timeline-list{
+  position:relative;
+  width:min(860px, 100%);
+  margin:46px auto 0;
+  display:grid;
+  gap:26px;
+}
+
+.timeline-list::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:0;
+  bottom:0;
+  width:1px;
+  transform:translateX(-50%);
+  background:rgba(81,66,88,.18);
+}
+
+.timeline-item{
+  position:relative;
+  width:50%;
+  display:flex;
+}
+
+.timeline-item:nth-child(odd){
+  justify-self:start;
+  justify-content:flex-end;
+  padding-right:42px;
+  text-align:right;
+}
+
+.timeline-item:nth-child(even){
+  justify-self:end;
+  justify-content:flex-start;
+  padding-left:42px;
+  text-align:left;
+}
+
+.timeline-item::before{
+  content:"";
+  position:absolute;
+  top:36px;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--dark-color);
+  z-index:3;
+}
+
+.timeline-item::after{
+  content:"";
+  position:absolute;
+  top:39px;
+  width:28px;
+  height:1px;
+  background:rgba(81,66,88,.28);
+  z-index:2;
+}
+
+.timeline-item:nth-child(odd)::before{
+  right:-4px;
+}
+
+.timeline-item:nth-child(odd)::after{
+  right:4px;
+}
+
+.timeline-item:nth-child(even)::before{
+  left:-4px;
+}
+
+.timeline-item:nth-child(even)::after{
+  left:4px;
+}
+
+.timeline-card-item{
+  width:min(360px, 100%);
+  display:flex;
+  gap:18px;
+  align-items:center;
+  background:transparent;
+  box-shadow:none;
+  padding:0;
+  border-radius:0;
+}
+
+.timeline-item:nth-child(odd) .timeline-card-item{
+  flex-direction:row-reverse;
+}
+
+.timeline-icon{
+  width:76px;
+  height:76px;
+  flex:0 0 76px;
+  display:grid;
+  place-items:center;
+  border-radius:0;
+  background:transparent;
+  color:var(--dark-color);
+}
+
+.timeline-icon svg{
+  width:68px;
+  height:68px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.timeline-time{
+  display:block;
+  margin-bottom:5px;
+  font-size:clamp(16px, 2vw, 22px);
+  color:rgba(81,66,88,.66);
+  font-weight:400;
+  letter-spacing:.08em;
+  line-height:1;
+}
+
+.timeline-card-item h3{
+  font-size:clamp(18px, 2.2vw, 24px);
+  font-weight:400;
+  margin-bottom:0;
+}
+
+/* Tablet & mobile */
+@media (max-width:820px){
+  .timeline-list::before{
+    left:16px;
+  }
+
+  .timeline-item,
+  .timeline-item:nth-child(odd),
+  .timeline-item:nth-child(even){
+    width:100%;
+    justify-self:stretch;
+    justify-content:flex-start;
+    padding-left:42px;
+    padding-right:0;
+    text-align:left;
+  }
+
+  .timeline-item::before,
+  .timeline-item:nth-child(odd)::before,
+  .timeline-item:nth-child(even)::before{
+    left:12px;
+    right:auto;
+    top:30px;
+  }
+
+  .timeline-item::after,
+  .timeline-item:nth-child(odd)::after,
+  .timeline-item:nth-child(even)::after{
+    left:20px;
+    right:auto;
+    top:33px;
+    width:16px;
+  }
+
+  .timeline-item:nth-child(odd) .timeline-card-item{
+    flex-direction:row;
+  }
+}
+
+/* Small mobile */
+@media (max-width:520px){
+  .timeline-card{
+    padding:24px 16px;
+  }
+
+  .timeline-list{
+    gap:16px;
+    margin-top:30px;
+  }
+
+  .timeline-list::before{
+    left:12px;
+  }
+
+  .timeline-item,
+  .timeline-item:nth-child(odd),
+  .timeline-item:nth-child(even){
+    padding-left:34px;
+  }
+
+  .timeline-item::before,
+  .timeline-item:nth-child(odd)::before,
+  .timeline-item:nth-child(even)::before{
+    left:8px;
+    top:26px;
+    width:7px;
+    height:7px;
+  }
+
+  .timeline-item::after,
+  .timeline-item:nth-child(odd)::after,
+  .timeline-item:nth-child(even)::after{
+    left:15px;
+    top:29px;
+    width:13px;
+  }
+
+  .timeline-card-item{
+    width:100%;
+    gap:10px;
+  }
+
+  .timeline-icon{
+    width:48px;
+    height:48px;
+    flex-basis:48px;
+  }
+
+  .timeline-icon svg{
+    width:44px;
+    height:44px;
+  }
+
+  .timeline-time{
+    font-size:14px;
+  }
+
+  .timeline-card-item h3{
+    font-size:17px;
+  }
+}
 
 
     @media (max-width:520px){
@@ -517,6 +749,7 @@
   padding-top:44px;
   padding-bottom:44px;
 }
+
       .glass{
         border-radius:24px;
       }
@@ -583,7 +816,7 @@
         <div class="date-reveal-item">
           <span class="date-label">Μήνας</span>
           <div class="date-scratch-box">
-            <strong>Ιουλιου</strong>
+            <strong>Ιούλιος</strong>
             <canvas class="date-scratch-canvas" aria-label="Scratch to reveal wedding month"></canvas>
             
           </div>
@@ -657,6 +890,119 @@
       </div>
     </div>
   </section>
+  <section class="section timeline-section" id="timeline">
+  <div class="glass timeline-card">
+    <p class="eyebrow">Wedding Timeline</p>
+    <h2 class="section-title">Πρόγραμμα γάμου</h2>
+    <p class="section-subtitle">
+      Ένα μικρό πρόγραμμα της ημέρας, για να γνωρίζετε κάθε όμορφη στιγμή που έχουμε ετοιμάσει.
+    </p>
+
+    <div class="timeline-list">
+      <div class="timeline-item">
+        <div class="timeline-card-item">
+          <div class="timeline-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <path d="M8 58h48"/>
+              <path d="M14 58V28l18-15 18 15v30"/>
+              <path d="M24 58V41a8 8 0 0 1 16 0v17"/>
+              <path d="M32 13V5"/>
+              <path d="M27 8h10"/>
+              <path d="M24 30h16"/>
+              <path d="M20 58V34"/>
+              <path d="M44 58V34"/>
+            </svg>
+          </div>
+          <div>
+            <span class="timeline-time">18:30</span>
+            <h3>Εκκλησία</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-card-item">
+          <div class="timeline-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+<svg viewBox="0 0 64 64">
+  <circle cx="25" cy="36" r="14"/>
+  <circle cx="39" cy="36" r="14"/>
+  <path d="M25 22l-5-7h10l-5 7Z"/>
+  <path d="M39 22l-5-7h10l-5 7Z"/>
+  <path d="M20 15l5-6l5 6"/>
+  <path d="M34 15l5-6l5 6"/>
+</svg>
+          </div>
+          <div>
+            <span class="timeline-time">19:00</span>
+            <h3>Γάμος</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-card-item">
+          <div class="timeline-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <path d="M20 8h24l-3 25a9 9 0 0 1-18 0L20 8Z"/>
+              <path d="M32 42v16"/>
+              <path d="M24 58h16"/>
+              <path d="M44 18h8"/>
+              <path d="M12 18h8"/>
+              <path d="M24 18h16"/>
+              <path d="M26 31c3 3 9 3 12 0"/>
+            </svg>
+          </div>
+          <div>
+            <span class="timeline-time">20:30</span>
+            <h3>Δεξίωση</h3>
+            <p>Στο κτήμα Αρχονταρίκι</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-card-item">
+          <div class="timeline-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <path d="M18 7v24"/>
+              <path d="M12 7v24"/>
+              <path d="M24 7v24"/>
+              <path d="M12 31h12"/>
+              <path d="M18 31v27"/>
+              <path d="M43 7v51"/>
+              <path d="M43 7c8 7 10 18 4 28h-4"/>
+              <path d="M35 58h16"/>
+              <path d="M10 58h16"/>
+            </svg>
+          </div>
+          <div>
+            <span class="timeline-time">21:00</span>
+            <h3>Δείπνο</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-card-item">
+          <div class="timeline-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64">
+              <path d="M24 45V13l26-5v32"/>
+              <path d="M24 45a9 9 0 1 1-6-8.5"/>
+              <path d="M50 40a9 9 0 1 1-6-8.5"/>
+              <path d="M24 21l26-5"/>
+              <path d="M24 29l26-5"/>
+            </svg>
+          </div>
+          <div>
+            <span class="timeline-time">22:00</span>
+            <h3>Πάρτυ</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
   <section class="section rsvp-section" id="rsvp">
     <div class="glass rsvp-card">
       <p class="eyebrow">RSVP</p>
