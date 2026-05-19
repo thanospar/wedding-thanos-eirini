@@ -15,6 +15,7 @@
     :root{
       --background-image:url("background.jpg");
       --invitation-image:url("invitation.png");
+       --story-image:url("story.jpg");
       --story-image:url("story.jpg");
       --main-color:#d4c8d5;
       --dark-color:#514258;
@@ -32,7 +33,6 @@
       color:var(--dark-color);
       background:#f6f1f7;
       overflow-x:hidden;
-       animation: fadeInPage 1s ease-in-out;
     }
 
     body::before{
@@ -96,7 +96,7 @@
     }
 
     h1{
-      font-size:clamp(44px, 4rem, 96px);
+      font-size:clamp(44px, 4.5vw, 96px);
       font-weight:400;
       line-height:.95;
       margin-bottom:22px;
@@ -109,16 +109,87 @@
       margin:0 auto 28px;
     }
 
-    .date-pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding:14px 24px;
-      border-radius:999px;
-      background:rgba(212,200,213,.62);
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);
-      font-size:clamp(15px, 2vw, 18px);
-      letter-spacing:.08em;
+    .date-reveal-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:clamp(14px, 2.5vw, 28px);
+      width:min(760px, 100%);
+      margin:0 auto;
+    }
+
+    .date-scratch-box{
+      position:relative;
+      min-height:180px;
+      padding:24px 16px;
+      border-radius:28px;
+      background:rgba(255,255,255,.66);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.5), 0 18px 38px rgba(70,50,78,.12);
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      isolation:isolate;
+    }
+
+    .date-reveal-item{
+      display:grid;
+      gap:12px;
+      text-align:center;
+    }
+
+    .date-label{
+      font-size:13px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:rgba(81,66,88,.68);
+      white-space:nowrap;
+    }
+
+    .date-scratch-box strong{
+      position:relative;
+      z-index:1;
+      font-size:clamp(34px, 5vw, 64px);
+      font-weight:400;
+      line-height:1;
+      color:var(--dark-color);
+      text-align:center;
+    }
+
+    .date-scratch-canvas{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      z-index:3;
+      border-radius:28px;
+      cursor:grab;
+      touch-action:none;
+    }
+
+    .date-scratch-canvas.scratched{
+      pointer-events:none;
+      opacity:0;
+      transition:opacity .8s ease;
+    }
+
+    .date-scratch-hint{
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform:translate(-50%, -50%);
+      z-index:4;
+      pointer-events:none;
+      font-style:normal;
+      font-size:clamp(12px, 1.8vw, 15px);
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.92);
+      text-shadow:0 1px 4px rgba(60,45,70,.35);
+      white-space:nowrap;
+      transition:opacity .4s ease;
+    }
+
+    .date-scratch-box.revealed .date-scratch-hint{
+      opacity:0;
     }
 
     .invitation-frame{
@@ -128,13 +199,31 @@
       box-shadow:0 24px 60px rgba(70,50,78,.22);
       transform:rotate(1.2deg);
     }
-
+.story-image{
+  background:
+    linear-gradient(rgba(212,200,213,.25), rgba(212,200,213,.25)),
+    var(--story-image);
+  background-size:cover;
+  background-position:top;
+}
     .invitation-frame img{
       width:100%;
       max-height:82vh;
       object-fit:contain;
       display:block;
       border-radius:18px;
+    }
+
+    .date-reveal-card{
+      padding:clamp(34px, 6vw, 70px);
+      text-align:center;
+    }
+
+    .date-note{
+      margin-top:24px;
+      font-size:clamp(15px, 2vw, 19px);
+      line-height:1.7;
+      color:rgba(81,66,88,.74);
     }
 
     .countdown-card{
@@ -163,10 +252,50 @@
     }
 
     .time-box{
+      position:relative;
+      overflow:hidden;
       padding:clamp(20px, 4vw, 34px) 12px;
       border-radius:24px;
       background:rgba(255,255,255,.66);
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.5), 0 18px 38px rgba(70,50,78,.12);
+      isolation:isolate;
+    }
+
+    .scratch-canvas{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      z-index:5;
+      cursor:grab;
+      touch-action:none;
+      border-radius:24px;
+    }
+
+    .scratch-canvas.scratched{
+      pointer-events:none;
+      opacity:0;
+      transition:opacity .8s ease;
+    }
+
+    .scratch-hint{
+      position:absolute;
+      left:50%;
+      bottom:12px;
+      transform:translateX(-50%);
+      z-index:6;
+      pointer-events:none;
+      font-size:10px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.88);
+      text-shadow:0 1px 3px rgba(60,45,70,.28);
+      transition:opacity .4s ease;
+      white-space:nowrap;
+    }
+
+    .time-box.revealed .scratch-hint{
+      opacity:0;
     }
 
     .time-box strong{
@@ -232,7 +361,7 @@
 
     .form-row{
       display:grid;
-      grid-template-columns:1fr;
+      
       gap:18px;
     }
 
@@ -325,11 +454,68 @@
       }
     }
 
-    @media (max-width:520px){
-      .section{
-        padding:44px 14px;
+    @media (max-width:620px){
+      .date-reveal-grid{
+        grid-template-columns:repeat(3, 1fr);
+        gap:8px;
+        max-width:100%;
       }
 
+      .date-scratch-box{
+        min-height:105px;
+        padding:18px 6px 12px;
+        border-radius:18px;
+      }
+      .date-reveal-item{
+        gap:8px;
+      }
+
+      .date-label{
+        font-size:9px;
+        letter-spacing:.1em;
+      }
+
+      .date-scratch-box strong{
+        font-size:clamp(22px, 8vw, 34px);
+      }
+
+      .date-scratch-canvas{
+        border-radius:18px;
+      }
+
+      .date-scratch-hint{
+        font-size:9px;
+        letter-spacing:.08em;
+      }
+    }
+
+    @media (max-width:380px){
+      .date-reveal-grid{
+        gap:6px;
+      }
+
+      .date-scratch-box{
+        min-height:92px;
+        padding:16px 4px 10px;
+      }
+
+      .date-scratch-box strong{
+        font-size:clamp(20px, 7.5vw, 30px);
+      }
+    }
+
+
+
+    @media (max-width:520px){
+      .section{
+  min-height:auto;
+  padding:34px 14px;
+}
+.hero-section{
+  min-height:100vh;
+  padding-top:44px;
+  padding-bottom:44px;
+}
       .glass{
         border-radius:24px;
       }
@@ -353,10 +539,6 @@
         border-radius:18px;
       }
     }
-      @keyframes fadeInPage {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
   </style>
 </head>
 
@@ -370,16 +552,83 @@
           Με πολλή χαρά σας προσκαλούμε να μοιραστείτε μαζί μας
           την πιο όμορφη ημέρα της ζωής μας.
         </p>
-        <div class="date-pill">Παρασκευή 17 Ιουλίου 2026</div>
       </div>
 
       <div class="invitation-frame">
-        <img src="invitation.jpg" alt="Wedding invitation" />
+        <img src="invitation-v.jpg" alt="Wedding invitation" />
       </div>
     </div>
   </section>
 
-  <section class="section countdown-section" id="countdown">
+  <section class="section date-reveal-section" id="date-reveal">
+    <div class="glass date-reveal-card">
+      <p class="eyebrow">Save the Date</p>
+      <h2 class="section-title">Η μεγάλη ημέρα</h2>
+      <p class="section-subtitle">
+        Κάθε ιστορία αγάπης έχει μια ημερομηνία που μένει για πάντα χαραγμένη στη μνήμη.
+        Ξύστε απαλά την κάρτα για να αποκαλυφθεί η ημέρα που θα γιορτάσουμε μαζί.
+      </p>
+
+      <div class="date-reveal-grid">
+        <div class="date-reveal-item">
+          <span class="date-label">Ημέρα</span>
+          <div class="date-scratch-box">
+            <strong>17</strong>
+            <canvas class="date-scratch-canvas" aria-label="Scratch to reveal wedding day"></canvas>
+            
+          </div>
+        </div>
+
+        <div class="date-reveal-item">
+          <span class="date-label">Μήνας</span>
+          <div class="date-scratch-box">
+            <strong>Ιούλιος</strong>
+            <canvas class="date-scratch-canvas" aria-label="Scratch to reveal wedding month"></canvas>
+            
+          </div>
+        </div>
+
+        <div class="date-reveal-item">
+          <span class="date-label">Έτος</span>
+          <div class="date-scratch-box">
+            <strong>2026</strong>
+            <canvas class="date-scratch-canvas" aria-label="Scratch to reveal wedding year"></canvas>
+            
+          </div>
+        </div>
+      </div>
+
+      <p class="date-note">
+        Κρατήστε αυτή την ημερομηνία για εμάς — θα χαρούμε πολύ να είστε δίπλα μας.
+      </p>
+    </div>
+  </section>
+
+ 
+
+  <section class="section story-section" id="story">
+    <div class="glass story-card">
+      <div class="story-text">
+        <p class="eyebrow">Our Story</p>
+        <h2>Η ιστορία μας</h2>
+        <p>
+          Κάποιες συναντήσεις μοιάζουν τυχαίες, αλλά τελικά γίνονται
+          η αρχή της πιο όμορφης διαδρομής. Έτσι ξεκίνησε και η δική μας ιστορία.
+        </p>
+        <p>
+          Από τις πρώτες στιγμές μέχρι σήμερα, γεμίσαμε τη ζωή μας με γέλια,
+          ταξίδια, όνειρα και μικρές καθημερινές στιγμές που έγιναν ανεκτίμητες.
+        </p>
+        <p>
+          Τώρα ανοίγουμε ένα νέο κεφάλαιο και θα χαρούμε να είστε δίπλα μας
+          σε αυτή τη σημαντική ημέρα.
+        </p>
+      </div>
+
+      <div class="story-image" role="img" aria-label="Couple photo"></div>
+    </div>
+  </section>
+   <section class="section countdown-section" id="countdown">
     <div class="glass countdown-card">
       <h2 class="section-title">Μετράμε αντίστροφα</h2>
       <p class="section-subtitle">
@@ -407,30 +656,6 @@
       </div>
     </div>
   </section>
-
-  <section class="section story-section" id="story">
-    <div class="glass story-card">
-      <div class="story-text">
-        <p class="eyebrow">Our Story</p>
-        <h2>Η ιστορία μας</h2>
-        <p>
-          Κάποιες συναντήσεις μοιάζουν τυχαίες, αλλά τελικά γίνονται
-          η αρχή της πιο όμορφης διαδρομής. Έτσι ξεκίνησε και η δική μας ιστορία.
-        </p>
-        <p>
-          Από τις πρώτες στιγμές μέχρι σήμερα, γεμίσαμε τη ζωή μας με γέλια,
-          ταξίδια, όνειρα και μικρές καθημερινές στιγμές που έγιναν ανεκτίμητες.
-        </p>
-        <p>
-          Τώρα ανοίγουμε ένα νέο κεφάλαιο και θα χαρούμε να είστε δίπλα μας
-          σε αυτή τη σημαντική ημέρα.
-        </p>
-      </div>
-
-      <div class="story-image" role="img" aria-label="Couple photo"></div>
-    </div>
-  </section>
-
   <section class="section rsvp-section" id="rsvp">
     <div class="glass rsvp-card">
       <p class="eyebrow">RSVP</p>
@@ -487,7 +712,7 @@
 
   <script>
     /* ΑΛΛΑΞΕ ΕΔΩ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΓΑΜΟΥ */
-    const weddingDate = new Date("2026-07-17T19:00:00").getTime();
+    const weddingDate = new Date("2026-07-17T18:00:00").getTime();
 
     const daysEl = document.getElementById("days");
     const hoursEl = document.getElementById("hours");
@@ -519,6 +744,115 @@
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
+
+    function setupWeddingDateScratch(){
+      const canvases = document.querySelectorAll(".date-scratch-canvas");
+
+      canvases.forEach((canvas) => {
+        const wrapper = canvas.closest(".date-scratch-box");
+        const ctx = canvas.getContext("2d");
+        let isDrawing = false;
+
+        function resizeCanvas(){
+          const rect = canvas.getBoundingClientRect();
+          const dpr = window.devicePixelRatio || 1;
+
+          canvas.width = rect.width * dpr;
+          canvas.height = rect.height * dpr;
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          drawCover(rect.width, rect.height);
+        }
+
+        function drawCover(width, height){
+          const gradient = ctx.createLinearGradient(0, 0, width, height);
+          gradient.addColorStop(0, "#e8e0e9");
+          gradient.addColorStop(.45, "#d4c8d5");
+          gradient.addColorStop(1, "#a995ad");
+
+          ctx.globalCompositeOperation = "source-over";
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, width, height);
+
+          ctx.fillStyle = "rgba(255,255,255,.25)";
+          for(let i = 0; i < 150; i++){
+            const x = Math.random() * width;
+            const y = Math.random() * height;
+            const radius = Math.random() * 1.8 + .4;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        function getPointerPosition(event){
+          const rect = canvas.getBoundingClientRect();
+          const point = event.touches ? event.touches[0] : event;
+
+          return {
+            x: point.clientX - rect.left,
+            y: point.clientY - rect.top
+          };
+        }
+
+        function scratch(event){
+          if(!isDrawing) return;
+          event.preventDefault();
+
+          const { x, y } = getPointerPosition(event);
+
+          ctx.globalCompositeOperation = "destination-out";
+          ctx.beginPath();
+          ctx.arc(x, y, 24, 0, Math.PI * 2);
+          ctx.fill();
+
+          checkRevealProgress();
+        }
+
+        function checkRevealProgress(){
+          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+          let transparentPixels = 0;
+
+          for(let i = 3; i < imageData.length; i += 4){
+            if(imageData[i] < 80) transparentPixels++;
+          }
+
+          const totalPixels = canvas.width * canvas.height;
+          const scratchedRatio = transparentPixels / totalPixels;
+
+          if(scratchedRatio > .42){
+            canvas.classList.add("scratched");
+            wrapper.classList.add("revealed");
+          }
+        }
+
+        canvas.addEventListener("mousedown", (event) => {
+          isDrawing = true;
+          scratch(event);
+        });
+
+        window.addEventListener("mouseup", () => {
+          isDrawing = false;
+        });
+
+        canvas.addEventListener("mousemove", scratch);
+
+        canvas.addEventListener("touchstart", (event) => {
+          isDrawing = true;
+          scratch(event);
+        }, { passive:false });
+
+        canvas.addEventListener("touchend", () => {
+          isDrawing = false;
+        });
+
+        canvas.addEventListener("touchmove", scratch, { passive:false });
+
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+      });
+    }
+
+    setupWeddingDateScratch();
 
     const rsvpForm = document.getElementById("rsvpForm");
     const successMessage = document.getElementById("successMessage");
