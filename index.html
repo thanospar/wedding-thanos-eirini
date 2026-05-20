@@ -155,6 +155,7 @@
             cursor: pointer;
             z-index: 4; 
             transition: transform 0.3s ease, opacity 0.3s ease;
+             animation: pulseSeal 1.5s infinite ease-in-out;
       
         }
 
@@ -184,6 +185,11 @@
             transform: scale(6) !important; /* Το !important εξασφαλίζει ότι το zoom αγνοεί τα mobile μεγέθη */
             opacity: 0; 
         }
+        @keyframes pulseSeal {
+    0% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.05); } /* Ελάχιστη μεγέθυνση 5% */
+    100% { transform: translateX(-50%) scale(1); }
+}
     </style>
 </head>
 <body>
