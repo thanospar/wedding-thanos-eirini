@@ -14,7 +14,7 @@
 
     :root{
       --background-image:url("background.jpg");
-      --invitation-image:url("invitation-v.jpg");
+      --invitation-image:url("invitation.png");
        --story-image:url("story.jpg");
       
       --main-color:#d4c8d5;
@@ -33,8 +33,6 @@
       color:var(--dark-color);
       background:#f6f1f7;
       overflow-x:hidden;
-      /* Εφέ ομαλής εμφάνισης (Fade in) όταν φορτώνει η νέα σελίδα */
-            animation: fadeInPage 1s ease-in-out;
     }
 
     body::before{
@@ -447,7 +445,7 @@
       }
 
       .story-image{
-        min-height:520px;
+        min-height:620px;
         order:-1;
       }
 
@@ -478,7 +476,7 @@
       }
 
       .date-scratch-box strong{
-        font-size:clamp(22px, 6vw, 34px);
+        font-size:clamp(22px, 8vw, 34px);
       }
 
       .date-scratch-canvas{
@@ -502,7 +500,7 @@
       }
 
       .date-scratch-box strong{
-        font-size:clamp(20px, 5vw, 30px);
+        font-size:clamp(20px, 7.5vw, 30px);
       }
     }
 .timeline-card{
@@ -775,79 +773,136 @@
         border-radius:18px;
       }
     }
-     @keyframes fadeInPage {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+
+    .scratch-section-instruction{
+  margin-top:26px;
+  display:grid;
+  justify-items:center;
+  gap:6px;
+  color:rgba(81,66,88,.72);
+}
+
+.scratch-hand{
+  display:block;
+  font-size:clamp(28px, 4vw, 42px);
+  line-height:1;
+  animation:scratchHandMove 1.25s ease-in-out infinite;
+  filter:drop-shadow(0 2px 4px rgba(60,45,70,.22));
+}
+
+.scratch-section-instruction p{
+  font-size:clamp(13px, 1.8vw, 16px);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin:0;
+}
+
+@keyframes scratchHandMove{
+  0%, 100%{
+    transform:translateX(-14px) rotate(-12deg);
+  }
+
+  50%{
+    transform:translateX(14px) rotate(12deg);
+  }
+}
+
+.calendar-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:26px;
+  padding:15px 28px;
+  border-radius:999px;
+  background:var(--main-color);
+  color:var(--dark-color);
+  text-decoration:none;
+  font-size:clamp(14px, 1.8vw, 16px);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  box-shadow:0 18px 36px rgba(70,50,78,.24);
+  transition:transform .25s ease, opacity .25s ease;
+}
+
+.calendar-button:hover{
+  transform:translateY(-2px);
+  opacity:.92;
+}
+
+@media (max-width:520px){
+  .calendar-button{
+    width:100%;
+    padding:14px 18px;
+    font-size:13px;
+    text-align:center;
+   
+  }
+}
   </style>
 </head>
 
 <body>
   <section class="section hero-section" id="invitation">
-    <div class="glass hero-card">
-      <div class="hero-text">
-        <p class="eyebrow">Wedding Invitation</p>
-        <h1>Θάνος<br>&amp;<br>Ειρήνη</h1>
-        <p>
-          Με πολλή χαρά σας προσκαλούμε να μοιραστείτε μαζί μας
-          την πιο όμορφη ημέρα της ζωής μας.
-        </p>
-      </div>
-
+  
+    
       <div class="invitation-frame">
-        <img src="invitation-v.jpg" alt="Wedding invitation" />
+         <picture>
+        <!-- Mobile image -->
+        <source media="(max-width: 768px)" srcset="invitation-v.jpg" />
+
+        <!-- Desktop image -->
+        <img src="invitation.jpg" alt="Wedding invitation" />
+      </picture>
       </div>
-    </div>
+    
   </section>
 
-  <section class="section date-reveal-section" id="date-reveal">
-    <div class="glass date-reveal-card">
-      <p class="eyebrow">Save the Date</p>
-      <h2 class="section-title">Η μεγάλη ημέρα</h2>
-      <p class="section-subtitle">
-        Κάθε ιστορία αγάπης έχει μια ημερομηνία που μένει για πάντα χαραγμένη στη μνήμη.</p>
+<section class="section date-reveal-section" id="date-reveal">
+  <div class="glass date-reveal-card">
+    <p class="eyebrow">Save the Date</p>
+    <h2 class="section-title">Η μεγάλη ημέρα</h2>
+    <p class="section-subtitle">
+      Κάθε ιστορία αγάπης έχει μια ημερομηνία που μένει για πάντα χαραγμένη στη μνήμη.
+    </p>
 
-      <div class="date-reveal-grid">
-        <div class="date-reveal-item">
-          <span class="date-label">Ημέρα</span>
-          <div class="date-scratch-box">
-            <strong>17</strong>
-            <canvas class="date-scratch-canvas" aria-label="Scratch to reveal wedding day"></canvas>
-            
-          </div>
-        </div>
-
-        <div class="date-reveal-item">
-          <span class="date-label">Μήνας</span>
-          <div class="date-scratch-box">
-            <strong>Ιουλίου</strong>
-            <canvas class="date-scratch-canvas" aria-label="Scratch to reveal wedding month"></canvas>
-            
-          </div>
-        </div>
-
-        <div class="date-reveal-item">
-          <span class="date-label">Έτος</span>
-          <div class="date-scratch-box">
-            <strong>2026</strong>
-            <canvas class="date-scratch-canvas" aria-label="Scratch to reveal wedding year"></canvas>
-            
-          </div>
+    <div class="date-reveal-grid">
+      <div class="date-reveal-item">
+        <span class="date-label">Ημέρα</span>
+        <div class="date-scratch-box">
+          <strong>17</strong>
         </div>
       </div>
 
-      <p class="date-note">
-        Scratch to reveal
-      </p>
+      <div class="date-reveal-item">
+        <span class="date-label">Μήνας</span>
+        <div class="date-scratch-box">
+          <strong>Ιούλιος</strong>
+        </div>
+      </div>
+
+      <div class="date-reveal-item">
+        <span class="date-label">Έτος</span>
+        <div class="date-scratch-box">
+          <strong>2026</strong>
+        </div>
+      </div>
     </div>
-  </section>
+
+    <p class="date-note">
+      Η μέρα που θα γιορτάσουμε την αγάπη μας μαζί με όλους εσάς.
+    </p>
+   <a class="calendar-button" id="googleCalendarButton" href="#" target="_blank" rel="noopener">
+  Αποθήκευση στο Google Calendar
+</a>
+  </div>
+</section>
 
  
 
   <section class="section story-section" id="story">
     <div class="glass story-card">
       <div class="story-text">
-        <p class="eyebrow">Our Story</p>
+        
         <h2>Η ιστορία μας</h2>
         <p>
           Κάποιες ιστορίες αγάπης δεν ξεκινούν από την πρώτη στιγμή. Γράφονται αθόρυβα, μέσα από κοινές παρέες, γνώριμα πρόσωπα, στιγμές που μοιάζουν απλές, αλλά τελικά η ζωή τις φυλάει για την κατάλληλη στιγμή.
@@ -867,34 +922,49 @@
       <div class="story-image" role="img" aria-label="Couple photo"></div>
     </div>
   </section>
-   <section class="section countdown-section" id="countdown">
-    <div class="glass countdown-card">
-      <h2 class="section-title">Μετράμε αντίστροφα</h2>
-      <p class="section-subtitle">
-        Κάθε μέρα μας φέρνει πιο κοντά στη στιγμή που θα γιορτάσουμε
-        την αγάπη μας μαζί με τους ανθρώπους που αγαπάμε.
-      </p>
+<section class="section countdown-section" id="countdown">
+  <div class="glass countdown-card">
+    <h2 class="section-title">Μετράμε αντίστροφα</h2>
+    <p class="section-subtitle">
+      Κάθε μέρα μας φέρνει πιο κοντά στη στιγμή που θα γιορτάσουμε
+      την αγάπη μας μαζί με τους ανθρώπους που αγαπάμε.
+    </p>
 
-      <div class="countdown-grid">
-        <div class="time-box">
-          <strong id="days">0</strong>
-          <span>Ημέρες</span>
-        </div>
-        <div class="time-box">
-          <strong id="hours">0</strong>
-          <span>Ώρες</span>
-        </div>
-        <div class="time-box">
-          <strong id="minutes">0</strong>
-          <span>Λεπτά</span>
-        </div>
-        <div class="time-box">
-          <strong id="seconds">0</strong>
-          <span>Δευτερόλεπτα</span>
-        </div>
+    <div class="countdown-grid">
+      <div class="time-box scratch-box">
+        <strong id="days">0</strong>
+        <span>Ημέρες</span>
+        <canvas class="scratch-canvas" aria-label=""></canvas>
+       
+      </div>
+
+      <div class="time-box scratch-box">
+        <strong id="hours">0</strong>
+        <span>Ώρες</span>
+        <canvas class="scratch-canvas" aria-label=""></canvas>
+       
+      </div>
+
+      <div class="time-box scratch-box">
+        <strong id="minutes">0</strong>
+        <span>Λεπτά</span>
+        <canvas class="scratch-canvas" aria-label=""></canvas>
+       
+      </div>
+
+      <div class="time-box scratch-box">
+        <strong id="seconds">0</strong>
+       
+        <canvas class="scratch-canvas" aria-label=""></canvas>
+        <span>Δευτερόλεπτα</span>
       </div>
     </div>
-  </section>
+    <div class="scratch-section-instruction">
+<span class="scratch-hand">👆</span>
+  <p>Scratch to reveal</p>
+</div>
+  </div>
+</section>
   <section class="section timeline-section" id="timeline">
   <div class="glass timeline-card">
     <p class="eyebrow">Wedding Timeline</p>
@@ -1010,7 +1080,7 @@
 </section>
   <section class="section rsvp-section" id="rsvp">
     <div class="glass rsvp-card">
-      <p class="eyebrow">RSVP</p>
+      
       <h2 class="section-title">Θα παρευρεθείτε;</h2>
       <p class="section-subtitle">
         Παρακαλούμε ενημερώστε μας αν θα μπορέσετε να είστε μαζί μας,
@@ -1018,7 +1088,7 @@
       </p>
 
       <!-- Βάλε εδώ το Formspree endpoint σου στο action -->
-      <form class="rsvp-form" id="rsvpForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <form class="rsvp-form" id="rsvpForm" action="https://formspree.io/f/xqeoqvby" method="POST">
         <div class="form-row">
           <label>
             Ονοματεπώνυμο
@@ -1048,12 +1118,8 @@
 
        
         </div>
-        <button class="submit-button" type="submit">Αποστολή RSVP</button>
+        <button class="submit-button" type="submit">Αποστολή</button>
 
-        <p class="small-note">
-          Αν χρησιμοποιείς Formspree, αντικατάστησε το
-          <strong>YOUR_FORM_ID</strong> με το δικό σου form ID.
-        </p>
       </form>
 
       <div class="success-message" id="successMessage">
@@ -1063,8 +1129,24 @@
   </section>
 
   <script>
+    const calendarButton = document.getElementById("googleCalendarButton");
+
+const eventTitle = "Γάμος Θάνου & Ειρήνης";
+const eventDetails = "Με πολλή χαρά σας προσκαλούμε στον γάμο μας.";
+const eventLocation = "https://www.google.com/maps/place/%CE%86%CE%B3%CE%B9%CE%BF%CF%82+%CE%94%CE%B7%CE%BC%CE%AE%CF%84%CF%81%CE%B9%CE%BF%CF%82+%CE%95%CE%BB%CE%B1%CF%83%CF%83%CF%8C%CE%BD%CE%B1%CF%82/@39.8949649,22.1882897,19.3z/data=!4m6!3m5!1s0x13585cd538d9f3db:0x9ccaf4c7b820e343!8m2!3d39.8951613!4d22.18914!16s%2Fg%2F1pv6xpl5p?entry=ttu&g_ep=EgoyMDI2MDYwMS4wIKXMDSoASAFQAw%3D%3D";
+
+const googleCalendarUrl =
+  "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+  "&text=" + encodeURIComponent(eventTitle) +
+  "&dates=20260717T160000Z/20260717T210000Z" +
+  "&details=" + encodeURIComponent(eventDetails) +
+  "&location=" + encodeURIComponent(eventLocation) +
+  "&ctz=Europe/Athens";
+
+
+calendarButton.href = googleCalendarUrl;
     /* ΑΛΛΑΞΕ ΕΔΩ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΓΑΜΟΥ */
-    const weddingDate = new Date("2026-07-17T18:00:00").getTime();
+    const weddingDate = new Date("2026-07-17T19:00:00").getTime();
 
     const daysEl = document.getElementById("days");
     const hoursEl = document.getElementById("hours");
@@ -1097,113 +1179,122 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    function setupWeddingDateScratch(){
-      const canvases = document.querySelectorAll(".date-scratch-canvas");
+    function setupCountdownScratch(){
+  const canvases = document.querySelectorAll(".scratch-canvas");
 
-      canvases.forEach((canvas) => {
-        const wrapper = canvas.closest(".date-scratch-box");
-        const ctx = canvas.getContext("2d");
-        let isDrawing = false;
+  canvases.forEach((canvas) => {
+    const box = canvas.closest(".scratch-box");
+    const ctx = canvas.getContext("2d");
+    let isDrawing = false;
 
-        function resizeCanvas(){
-          const rect = canvas.getBoundingClientRect();
-          const dpr = window.devicePixelRatio || 1;
+    function resizeCanvas(){
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
 
-          canvas.width = rect.width * dpr;
-          canvas.height = rect.height * dpr;
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          drawCover(rect.width, rect.height);
-        }
-
-        function drawCover(width, height){
-          const gradient = ctx.createLinearGradient(0, 0, width, height);
-          gradient.addColorStop(0, "#e8e0e9");
-          gradient.addColorStop(.45, "#d4c8d5");
-          gradient.addColorStop(1, "#a995ad");
-
-          ctx.globalCompositeOperation = "source-over";
-          ctx.fillStyle = gradient;
-          ctx.fillRect(0, 0, width, height);
-
-          ctx.fillStyle = "rgba(255,255,255,.25)";
-          for(let i = 0; i < 150; i++){
-            const x = Math.random() * width;
-            const y = Math.random() * height;
-            const radius = Math.random() * 1.8 + .4;
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2);
-            ctx.fill();
-          }
-        }
-
-        function getPointerPosition(event){
-          const rect = canvas.getBoundingClientRect();
-          const point = event.touches ? event.touches[0] : event;
-
-          return {
-            x: point.clientX - rect.left,
-            y: point.clientY - rect.top
-          };
-        }
-
-        function scratch(event){
-          if(!isDrawing) return;
-          event.preventDefault();
-
-          const { x, y } = getPointerPosition(event);
-
-          ctx.globalCompositeOperation = "destination-out";
-          ctx.beginPath();
-          ctx.arc(x, y, 24, 0, Math.PI * 2);
-          ctx.fill();
-
-          checkRevealProgress();
-        }
-
-        function checkRevealProgress(){
-          const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-          let transparentPixels = 0;
-
-          for(let i = 3; i < imageData.length; i += 4){
-            if(imageData[i] < 80) transparentPixels++;
-          }
-
-          const totalPixels = canvas.width * canvas.height;
-          const scratchedRatio = transparentPixels / totalPixels;
-
-          if(scratchedRatio > .42){
-            canvas.classList.add("scratched");
-            wrapper.classList.add("revealed");
-          }
-        }
-
-        canvas.addEventListener("mousedown", (event) => {
-          isDrawing = true;
-          scratch(event);
-        });
-
-        window.addEventListener("mouseup", () => {
-          isDrawing = false;
-        });
-
-        canvas.addEventListener("mousemove", scratch);
-
-        canvas.addEventListener("touchstart", (event) => {
-          isDrawing = true;
-          scratch(event);
-        }, { passive:false });
-
-        canvas.addEventListener("touchend", () => {
-          isDrawing = false;
-        });
-
-        canvas.addEventListener("touchmove", scratch, { passive:false });
-
-        resizeCanvas();
-        window.addEventListener("resize", resizeCanvas);
-      });
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drawCover(rect.width, rect.height);
     }
 
+    function drawCover(width, height){
+      const gradient = ctx.createLinearGradient(0, 0, width, height);
+      gradient.addColorStop(0, "rgba(232, 224, 233, .92)");
+gradient.addColorStop(.45, "rgba(212, 200, 213, .98)");
+gradient.addColorStop(1, "rgba(169, 149, 173, .92)");
+
+ctx.globalCompositeOperation = "source-over";
+ctx.fillStyle = gradient;
+ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = "rgba(255,255,255,.22)";
+      for(let i = 0; i < 130; i++){
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        const radius = Math.random() * 1.8 + .4;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.fillStyle = "rgba(255,255,255,.86)";
+      ctx.font = "14px Georgia";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      
+
+      ctx.font = "11px Georgia";
+     
+    }
+
+    function getPointerPosition(event){
+      const rect = canvas.getBoundingClientRect();
+      const point = event.touches ? event.touches[0] : event;
+
+      return {
+        x: point.clientX - rect.left,
+        y: point.clientY - rect.top
+      };
+    }
+
+    function scratch(event){
+      if(!isDrawing) return;
+      event.preventDefault();
+
+      const { x, y } = getPointerPosition(event);
+
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.beginPath();
+      ctx.arc(x, y, 22, 0, Math.PI * 2);
+      ctx.fill();
+
+      checkRevealProgress();
+    }
+
+    function checkRevealProgress(){
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      let transparentPixels = 0;
+
+      for(let i = 3; i < imageData.length; i += 4){
+        if(imageData[i] < 80) transparentPixels++;
+      }
+
+      const totalPixels = canvas.width * canvas.height;
+      const scratchedRatio = transparentPixels / totalPixels;
+
+      if(scratchedRatio > .42){
+        canvas.classList.add("scratched");
+        box.classList.add("revealed");
+      }
+    }
+
+    canvas.addEventListener("mousedown", (event) => {
+      isDrawing = true;
+      scratch(event);
+    });
+
+    window.addEventListener("mouseup", () => {
+      isDrawing = false;
+    });
+
+    canvas.addEventListener("mousemove", scratch);
+
+    canvas.addEventListener("touchstart", (event) => {
+      isDrawing = true;
+      scratch(event);
+    }, { passive:false });
+
+    canvas.addEventListener("touchend", () => {
+      isDrawing = false;
+    });
+
+    canvas.addEventListener("touchmove", scratch, { passive:false });
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+  });
+}
+
+setupCountdownScratch();
     setupWeddingDateScratch();
 
     const rsvpForm = document.getElementById("rsvpForm");
