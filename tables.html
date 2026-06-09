@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Βρείτε τη θέση σας | Θάνος & Ειρήνη</title>
+
+  <!-- Sharing preview -->
+  <meta property="og:title" content="Βρείτε τη θέση σας | Θάνος & Ειρήνη" />
+  <meta property="og:description" content="Αναζητήστε το όνομά σας και δείτε σε ποιο τραπέζι κάθεστε." />
+  <meta property="og:type" content="website" />
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    :root{
+      --background-image:url("background.jpg");
+      --main-color:#d4c8d5;
+      --dark-color:#514258;
+      --light-color:#fbf8fb;
+      --glass-bg:rgba(255,255,255,.58);
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      min-height:100vh;
+      font-family:Georgia, 'Times New Roman', serif;
+      color:var(--dark-color);
+      background:#f6f1f7;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        linear-gradient(rgba(255,255,255,.16), rgba(255,255,255,.28)),
+        var(--background-image);
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      z-index:-2;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(circle at center, transparent 0%, rgba(67,48,75,.18) 100%);
+      z-index:-1;
+      pointer-events:none;
+    }
+
+    .section{
+      min-height:100vh;
+      padding:clamp(34px, 7vw, 90px) clamp(16px, 5vw, 70px);
+      display:grid;
+      place-items:center;
+      position:relative;
+    }
+
+    .glass{
+      width:min(760px, 100%);
+      background:var(--glass-bg);
+      border:1px solid rgba(255,255,255,.5);
+      border-radius:32px;
+      box-shadow:0 30px 80px rgba(70,50,78,.18);
+      backdrop-filter:blur(12px);
+    }
+
+    .table-card{
+      padding:clamp(28px, 6vw, 62px);
+      text-align:center;
+    }
+
+    .eyebrow{
+      font-size:clamp(12px, 1.8vw, 15px);
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:rgba(81,66,88,.68);
+      margin-bottom:18px;
+    }
+
+    h1{
+      font-size:clamp(42px, 7vw, 78px);
+      font-weight:400;
+      line-height:.95;
+      margin-bottom:18px;
+    }
+
+    .subtitle{
+      font-size:clamp(16px, 2vw, 21px);
+      line-height:1.7;
+      max-width:620px;
+      margin:0 auto 34px;
+      color:rgba(81,66,88,.78);
+    }
+
+    .search-area{
+      position:relative;
+      width:min(560px, 100%);
+      margin:0 auto;
+      text-align:left;
+    }
+
+    .search-label{
+      display:block;
+      margin-bottom:10px;
+      font-size:13px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(81,66,88,.68);
+      text-align:center;
+    }
+
+    .search-input{
+      width:100%;
+      border:0;
+      outline:none;
+      border-radius:999px;
+      padding:17px 22px;
+      background:rgba(255,255,255,.78);
+      box-shadow:
+        inset 0 0 0 1px rgba(81,66,88,.12),
+        0 16px 34px rgba(70,50,78,.12);
+      font:inherit;
+      font-size:17px;
+      color:var(--dark-color);
+      text-align:center;
+    }
+
+    .search-input::placeholder{
+      color:rgba(81,66,88,.46);
+    }
+
+    .suggestions{
+      display:none;
+      position:absolute;
+      left:0;
+      right:0;
+      top:calc(100% + 10px);
+      max-height:260px;
+      overflow:auto;
+      background:rgba(255,255,255,.92);
+      border:1px solid rgba(255,255,255,.65);
+      border-radius:22px;
+      box-shadow:0 22px 50px rgba(70,50,78,.18);
+      backdrop-filter:blur(10px);
+      z-index:10;
+    }
+
+    .suggestions.show{
+      display:block;
+    }
+
+    .suggestion-item{
+      width:100%;
+      border:0;
+      background:transparent;
+      padding:14px 18px;
+      font:inherit;
+      font-size:16px;
+      color:var(--dark-color);
+      text-align:left;
+      cursor:pointer;
+      border-bottom:1px solid rgba(81,66,88,.08);
+      transition:background .2s ease;
+    }
+
+    .suggestion-item:last-child{
+      border-bottom:0;
+    }
+
+    .suggestion-item:hover{
+      background:rgba(212,200,213,.35);
+    }
+
+    .result-card{
+      display:none;
+      margin:34px auto 0;
+      width:min(520px, 100%);
+      padding:28px 20px;
+      border-radius:28px;
+      background:rgba(255,255,255,.68);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.55),
+        0 18px 38px rgba(70,50,78,.12);
+      animation:resultAppear .45s ease both;
+    }
+
+    .result-card.show{
+      display:block;
+    }
+
+    @keyframes resultAppear{
+      from{
+        opacity:0;
+        transform:translateY(12px) scale(.98);
+      }
+
+      to{
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
+    }
+
+    .result-name{
+      font-size:clamp(22px, 4vw, 34px);
+      font-weight:400;
+      line-height:1.2;
+      margin-bottom:12px;
+    }
+
+    .result-label{
+      display:block;
+      font-size:12px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:rgba(81,66,88,.58);
+      margin-bottom:10px;
+    }
+
+    .result-table{
+      display:inline-grid;
+      place-items:center;
+      min-width:150px;
+      min-height:84px;
+      padding:18px 26px;
+      border-radius:24px;
+      background:var(--main-color);
+      color:var(--dark-color);
+      font-size:clamp(26px, 5vw, 46px);
+      line-height:1;
+      box-shadow:0 18px 36px rgba(70,50,78,.24);
+    }
+
+    .result-extra{
+      display:none;
+      margin-top:16px;
+      font-size:15px;
+      line-height:1.6;
+      color:rgba(81,66,88,.7);
+    }
+
+    .result-extra.show{
+      display:block;
+    }
+
+    .message{
+      display:none;
+      margin:24px auto 0;
+      width:min(520px, 100%);
+      padding:16px 18px;
+      border-radius:20px;
+      background:rgba(255,255,255,.56);
+      color:rgba(81,66,88,.72);
+      line-height:1.6;
+      font-size:15px;
+    }
+
+    .message.show{
+      display:block;
+    }
+
+    .reset-button{
+      display:none;
+      margin:22px auto 0;
+      border:0;
+      border-radius:999px;
+      padding:13px 24px;
+      background:rgba(81,66,88,.9);
+      color:#fff;
+      font:inherit;
+      font-size:14px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+      box-shadow:0 16px 30px rgba(70,50,78,.2);
+      transition:transform .25s ease, opacity .25s ease;
+    }
+
+    .reset-button.show{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .reset-button:hover{
+      transform:translateY(-2px);
+      opacity:.92;
+    }
+
+    .small-note{
+      margin-top:28px;
+      font-size:14px;
+      color:rgba(81,66,88,.58);
+      line-height:1.6;
+    }
+
+    @media (max-width:520px){
+      .section{
+        padding:34px 14px;
+      }
+
+      .glass{
+        border-radius:24px;
+      }
+
+      .table-card{
+        padding:28px 16px;
+      }
+
+      h1{
+        font-size:44px;
+      }
+
+      .subtitle{
+        margin-bottom:28px;
+      }
+
+      .search-input{
+        padding:15px 18px;
+        font-size:16px;
+      }
+
+      .suggestion-item{
+        font-size:15px;
+        padding:13px 16px;
+      }
+
+      .result-card{
+        margin-top:28px;
+        padding:24px 16px;
+        border-radius:24px;
+      }
+
+      .result-table{
+        min-width:130px;
+        min-height:74px;
+        border-radius:22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <section class="section table-section">
+      <div class="glass table-card">
+        <p class="eyebrow">Wedding Seating</p>
+
+        <h1>Βρείτε τη θέση σας</h1>
+
+        <p class="subtitle">
+          Πληκτρολογήστε το όνομά σας και δείτε σε ποιο τραπέζι κάθεστε.
+        </p>
+
+        <div class="search-area">
+          <label class="search-label" for="guestSearch">Αναζήτηση ονόματος</label>
+
+          <input
+            class="search-input"
+            id="guestSearch"
+            type="text"
+            autocomplete="off"
+            placeholder="π.χ. Μαρία Παπαδοπούλου"
+          />
+
+          <div class="suggestions" id="suggestions"></div>
+        </div>
+
+        <div class="result-card" id="resultCard">
+          <h2 class="result-name" id="resultName"></h2>
+          <span class="result-label">Το τραπέζι σας</span>
+          <div class="result-table" id="resultTable"></div>
+          <p class="result-extra" id="resultExtra"></p>
+        </div>
+
+        <div class="message" id="messageBox"></div>
+
+        <button class="reset-button" id="resetButton" type="button">
+          Νέα αναζήτηση
+        </button>
+
+        <p class="small-note">
+          Θάνος &amp; Ειρήνη · 17 Ιουλίου 2026
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const csvFile = "guests.csv";
+
+    const guestSearch = document.getElementById("guestSearch");
+    const suggestions = document.getElementById("suggestions");
+    const resultCard = document.getElementById("resultCard");
+    const resultName = document.getElementById("resultName");
+    const resultTable = document.getElementById("resultTable");
+    const resultExtra = document.getElementById("resultExtra");
+    const messageBox = document.getElementById("messageBox");
+    const resetButton = document.getElementById("resetButton");
+
+    let guests = [];
+
+    function normalizeText(text){
+      return text
+        .toString()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+    }
+
+    function parseCSVLine(line){
+      const result = [];
+      let current = "";
+      let insideQuotes = false;
+
+      for(let i = 0; i < line.length; i++){
+        const char = line[i];
+        const nextChar = line[i + 1];
+
+        if(char === '"' && insideQuotes && nextChar === '"'){
+          current += '"';
+          i++;
+        }else if(char === '"'){
+          insideQuotes = !insideQuotes;
+        }else if(char === "," && !insideQuotes){
+          result.push(current.trim());
+          current = "";
+        }else{
+          current += char;
+        }
+      }
+
+      result.push(current.trim());
+      return result;
+    }
+
+    async function loadGuests(){
+      try{
+        const response = await fetch(csvFile);
+
+        if(!response.ok){
+          throw new Error("CSV not found");
+        }
+
+        const csvText = await response.text();
+
+        guests = csvText
+          .trim()
+          .split(/\r?\n/)
+          .slice(1)
+          .map(line => {
+            const columns = parseCSVLine(line);
+
+            return {
+              name: columns[0] || "",
+              table: columns[1] || "",
+              note: columns[2] || ""
+            };
+          })
+          .filter(guest => guest.name && guest.table);
+
+        if(!guests.length){
+          showMessage("Δεν βρέθηκαν καλεσμένοι στο αρχείο guests.csv.");
+        }
+      }catch(error){
+        showMessage("Δεν μπόρεσε να φορτωθεί το αρχείο guests.csv. Βεβαιώσου ότι είναι στο ίδιο repository με το tables.html.");
+      }
+    }
+
+    function showMessage(text){
+      messageBox.textContent = text;
+      messageBox.classList.add("show");
+    }
+
+    function hideMessage(){
+      messageBox.textContent = "";
+      messageBox.classList.remove("show");
+    }
+
+    function clearSuggestions(){
+      suggestions.innerHTML = "";
+      suggestions.classList.remove("show");
+    }
+
+    function showSuggestions(matches){
+      clearSuggestions();
+
+      if(!matches.length){
+        return;
+      }
+
+      matches.slice(0, 8).forEach(guest => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "suggestion-item";
+        button.textContent = guest.name;
+
+        button.addEventListener("click", () => {
+          selectGuest(guest);
+        });
+
+        suggestions.appendChild(button);
+      });
+
+      suggestions.classList.add("show");
+    }
+
+    function selectGuest(guest){
+      guestSearch.value = guest.name;
+      clearSuggestions();
+      hideMessage();
+
+      resultName.textContent = guest.name;
+      resultTable.textContent = guest.table;
+
+      if(guest.note){
+        resultExtra.textContent = guest.note;
+        resultExtra.classList.add("show");
+      }else{
+        resultExtra.textContent = "";
+        resultExtra.classList.remove("show");
+      }
+
+      resultCard.classList.add("show");
+      resetButton.classList.add("show");
+    }
+
+    function resetSearch(){
+      guestSearch.value = "";
+      resultCard.classList.remove("show");
+      resetButton.classList.remove("show");
+      resultExtra.classList.remove("show");
+      hideMessage();
+      clearSuggestions();
+      guestSearch.focus();
+    }
+
+    guestSearch.addEventListener("input", () => {
+      const query = normalizeText(guestSearch.value);
+
+      resultCard.classList.remove("show");
+      resetButton.classList.remove("show");
+      hideMessage();
+
+      if(query.length < 2){
+        clearSuggestions();
+        return;
+      }
+
+      const matches = guests.filter(guest =>
+        normalizeText(guest.name).includes(query)
+      );
+
+      if(matches.length){
+        showSuggestions(matches);
+      }else{
+        clearSuggestions();
+        showMessage("Δεν βρέθηκε κάποιο όνομα. Δοκιμάστε με όνομα ή επώνυμο.");
+      }
+    });
+
+    guestSearch.addEventListener("keydown", (event) => {
+      if(event.key === "Enter"){
+        event.preventDefault();
+
+        const query = normalizeText(guestSearch.value);
+
+        const exactMatch = guests.find(guest =>
+          normalizeText(guest.name) === query
+        );
+
+        const firstMatch = guests.find(guest =>
+          normalizeText(guest.name).includes(query)
+        );
+
+        if(exactMatch){
+          selectGuest(exactMatch);
+        }else if(firstMatch){
+          selectGuest(firstMatch);
+        }
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if(!event.target.closest(".search-area")){
+        clearSuggestions();
+      }
+    });
+
+    resetButton.addEventListener("click", resetSearch);
+
+    loadGuests();
+  </script>
+</body>
+</html>
