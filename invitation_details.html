@@ -200,18 +200,13 @@
       transform:rotate(1.2deg);
     }
 .story-image{
-  border-radius:28px;
-  overflow:hidden;
-  box-shadow:0 24px 60px rgba(70,50,78,.22);
-  min-height:clamp(420px, 70vh, 720px);
   background:
-    linear-gradient(rgba(212,200,213,.12), rgba(212,200,213,.12)),
+    linear-gradient(rgba(212,200,213,.25), rgba(212,200,213,.25)),
     var(--story-image);
-  background-size:contain;
-  background-position:center;
-  background-repeat:no-repeat;
-  background-color:rgba(255,255,255,.55);
+  background-size:cover;
+  background-position:top;
 }
+    
     .invitation-frame img{
       width:100%;
       max-height:82vh;
@@ -337,6 +332,7 @@
       background-size:cover;
       background-position:center;
     }
+
     .story-text h2{
       font-size:clamp(34px, 5vw, 62px);
       font-weight:400;
@@ -679,8 +675,7 @@
   }
 
     .story-image{
-    min-height:clamp(420px, 72vh, 680px);
-    order:-1;
+    min-height:400px;
   }
 }
 
