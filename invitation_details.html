@@ -200,11 +200,17 @@
       transform:rotate(1.2deg);
     }
 .story-image{
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:0 24px 60px rgba(70,50,78,.22);
+  min-height:clamp(420px, 70vh, 720px);
   background:
-    linear-gradient(rgba(212,200,213,.25), rgba(212,200,213,.25)),
+    linear-gradient(rgba(212,200,213,.12), rgba(212,200,213,.12)),
     var(--story-image);
-  background-size:cover;
-  background-position:top;
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-color:rgba(255,255,255,.55);
 }
     .invitation-frame img{
       width:100%;
@@ -673,6 +679,11 @@
   .timeline-item:nth-child(odd) .timeline-card-item{
     flex-direction:row;
   }
+
+    .story-image{
+    min-height:clamp(420px, 72vh, 680px);
+    order:-1;
+  }
 }
 
 /* Small mobile */
@@ -749,6 +760,11 @@
   padding-top:44px;
   padding-bottom:44px;
 }
+
+       .story-image{
+    min-height:clamp(360px, 68vh, 560px);
+    border-radius:22px;
+  }
 
       .glass{
         border-radius:24px;
@@ -919,7 +935,12 @@
 Τώρα ανυπομονούμε να γιορτάσουμε την αγάπη μας μαζί με τους ανθρώπους που αγαπάμε, ξεκινώντας το δικό μας «για πάντα».        </p>
       </div>
 
-      <div class="story-image" role="img" aria-label="Couple photo"></div>
+    <div class="story-image">
+  <picture>
+    <source media="(max-width: 768px)" srcset="story-mobile.jpg">
+    <img src="story.jpg" alt="Η ιστορία μας">
+  </picture>
+</div>
     </div>
   </section>
 <section class="section countdown-section" id="countdown">
