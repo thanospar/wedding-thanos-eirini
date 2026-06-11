@@ -316,16 +316,18 @@
       align-items:center;
     }
 .story-image{
-      border-radius:28px;
-      overflow:hidden;
-      box-shadow:0 24px 60px rgba(70,50,78,.22);
-      min-height:600px;
-      background:
-        linear-gradient(rgba(212,200,213,.25), rgba(212,200,213,.25)),
-        var(--story-image);
-      background-size:cover;
-      background-position:center;
-    }
+  border-radius:28px;
+  overflow:hidden;
+  box-shadow:0 24px 60px rgba(70,50,78,.22);
+  height:560px;
+  background:
+    linear-gradient(rgba(212,200,213,.10), rgba(212,200,213,.10)),
+    var(--story-image);
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-color:rgba(255,255,255,.55);
+}
 
     .story-text h2{
       font-size:clamp(34px, 5vw, 62px);
@@ -496,6 +498,12 @@
       .date-scratch-box strong{
         font-size:clamp(20px, 5vw, 30px);
       }
+
+.story-image{
+    height:430px;
+    border-radius:22px;
+  }
+      
     }
 .timeline-card{
   padding:clamp(34px, 6vw, 70px);
@@ -668,9 +676,7 @@
     flex-direction:row;
   }
 
-    .story-image{
-    min-height:400px;
-  }
+   
 }
 
 /* Small mobile */
@@ -748,10 +754,7 @@
   padding-bottom:44px;
 }
 
-       .story-image{
-    min-height:clamp(360px, 68vh, 560px);
-    border-radius:22px;
-  }
+ 
 
       .glass{
         border-radius:24px;
