@@ -1124,7 +1124,10 @@
 
        
         </div>
-        <button class="submit-button" type="submit">Αποστολή</button>
+       <button class="submit-button" type="button" onclick="submitRsvpForm()">
+  Αποστολή
+</button>
+
 
       </form>
 
@@ -1134,201 +1137,238 @@
     </div>
   </section>
 
-  <script>
-    const calendarButton = document.getElementById("googleCalendarButton");
+<script>
+  
+  /* =========================
+     GOOGLE CALENDAR BUTTON
+  ========================= */
 
-const eventTitle = "Γάμος Θάνου & Ειρήνης";
-const eventDetails = "Με πολλή χαρά σας προσκαλούμε στον γάμο μας.";
-const eventLocation = "https://www.google.com/maps/place/%CE%86%CE%B3%CE%B9%CE%BF%CF%82+%CE%94%CE%B7%CE%BC%CE%AE%CF%84%CF%81%CE%B9%CE%BF%CF%82+%CE%95%CE%BB%CE%B1%CF%83%CF%83%CF%8C%CE%BD%CE%B1%CF%82/@39.8949649,22.1882897,19.3z/data=!4m6!3m5!1s0x13585cd538d9f3db:0x9ccaf4c7b820e343!8m2!3d39.8951613!4d22.18914!16s%2Fg%2F1pv6xpl5p?entry=ttu&g_ep=EgoyMDI2MDYwMS4wIKXMDSoASAFQAw%3D%3D";
+  const calendarButton = document.getElementById("googleCalendarButton");
 
-const googleCalendarUrl =
-  "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-  "&text=" + encodeURIComponent(eventTitle) +
-  "&dates=20260717T160000Z/20260717T210000Z" +
-  "&details=" + encodeURIComponent(eventDetails) +
-  "&location=" + encodeURIComponent(eventLocation) +
-  "&ctz=Europe/Athens";
+  if(calendarButton){
+    const eventTitle = "Γάμος Θάνου & Ειρήνης";
+    const eventDetails = "Με πολλή χαρά σας προσκαλούμε στον γάμο μας.";
+    const eventLocation = "Άγιος Δημήτριος Ελασσόνας";
+
+    const googleCalendarUrl =
+      "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      "&text=" + encodeURIComponent(eventTitle) +
+      "&dates=20260717T190000/20260718T000000" +
+      "&details=" + encodeURIComponent(eventDetails) +
+      "&location=" + encodeURIComponent(eventLocation) +
+      "&ctz=Europe/Athens";
+
+    calendarButton.href = googleCalendarUrl;
+  }
 
 
-calendarButton.href = googleCalendarUrl;
-    /* ΑΛΛΑΞΕ ΕΔΩ ΤΗΝ ΗΜΕΡΟΜΗΝΙΑ ΓΑΜΟΥ */
-    const weddingDate = new Date("2026-07-17T19:00:00").getTime();
+  /* =========================
+     COUNTDOWN
+  ========================= */
 
-    const daysEl = document.getElementById("days");
-    const hoursEl = document.getElementById("hours");
-    const minutesEl = document.getElementById("minutes");
-    const secondsEl = document.getElementById("seconds");
+  const weddingDate = new Date("2026-07-17T19:00:00").getTime();
 
-    function updateCountdown(){
-      const now = new Date().getTime();
-      const distance = weddingDate - now;
+  const daysEl = document.getElementById("days");
+  const hoursEl = document.getElementById("hours");
+  const minutesEl = document.getElementById("minutes");
+  const secondsEl = document.getElementById("seconds");
 
-      if(distance <= 0){
-        daysEl.textContent = "0";
-        hoursEl.textContent = "0";
-        minutesEl.textContent = "0";
-        secondsEl.textContent = "0";
-        return;
+  function updateCountdown(){
+    if(!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+
+    const now = new Date().getTime();
+    const distance = weddingDate - now;
+
+    if(distance <= 0){
+      daysEl.textContent = "0";
+      hoursEl.textContent = "0";
+      minutesEl.textContent = "0";
+      secondsEl.textContent = "0";
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    daysEl.textContent = days;
+    hoursEl.textContent = hours;
+    minutesEl.textContent = minutes;
+    secondsEl.textContent = seconds;
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+
+  /* =========================
+     SCRATCH EFFECT ΣΤΟ COUNTDOWN
+  ========================= */
+
+  function setupCountdownScratch(){
+    const canvases = document.querySelectorAll(".scratch-canvas");
+
+    if(!canvases.length) return;
+
+    canvases.forEach((canvas) => {
+      const box = canvas.closest(".scratch-box");
+      const ctx = canvas.getContext("2d");
+
+      if(!box || !ctx) return;
+
+      let isDrawing = false;
+
+      function resizeCanvas(){
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+
+        if(rect.width === 0 || rect.height === 0) return;
+
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        drawCover(rect.width, rect.height);
       }
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      function drawCover(width, height){
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
 
-      daysEl.textContent = days;
-      hoursEl.textContent = hours;
-      minutesEl.textContent = minutes;
-      secondsEl.textContent = seconds;
-    }
+        gradient.addColorStop(0, "rgba(232, 224, 233, .92)");
+        gradient.addColorStop(.45, "rgba(212, 200, 213, .98)");
+        gradient.addColorStop(1, "rgba(169, 149, 173, .92)");
 
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
+        ctx.globalCompositeOperation = "source-over";
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
 
-    function setupCountdownScratch(){
-  const canvases = document.querySelectorAll(".scratch-canvas");
+        ctx.fillStyle = "rgba(255,255,255,.22)";
 
-  canvases.forEach((canvas) => {
-    const box = canvas.closest(".scratch-box");
-    const ctx = canvas.getContext("2d");
-    let isDrawing = false;
+        for(let i = 0; i < 130; i++){
+          const x = Math.random() * width;
+          const y = Math.random() * height;
+          const radius = Math.random() * 1.8 + .4;
 
-    function resizeCanvas(){
-      const rect = canvas.getBoundingClientRect();
-      const dpr = window.devicePixelRatio || 1;
-
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      drawCover(rect.width, rect.height);
-    }
-
-    function drawCover(width, height){
-      const gradient = ctx.createLinearGradient(0, 0, width, height);
-      gradient.addColorStop(0, "rgba(232, 224, 233, .92)");
-gradient.addColorStop(.45, "rgba(212, 200, 213, .98)");
-gradient.addColorStop(1, "rgba(169, 149, 173, .92)");
-
-ctx.globalCompositeOperation = "source-over";
-ctx.fillStyle = gradient;
-ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = "rgba(255,255,255,.22)";
-      for(let i = 0; i < 130; i++){
-        const x = Math.random() * width;
-        const y = Math.random() * height;
-        const radius = Math.random() * 1.8 + .4;
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.fillStyle = "rgba(255,255,255,.86)";
-      ctx.font = "14px Georgia";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      
-
-      ctx.font = "11px Georgia";
-     
-    }
-
-    function getPointerPosition(event){
-      const rect = canvas.getBoundingClientRect();
-      const point = event.touches ? event.touches[0] : event;
-
-      return {
-        x: point.clientX - rect.left,
-        y: point.clientY - rect.top
-      };
-    }
-
-    function scratch(event){
-      if(!isDrawing) return;
-      event.preventDefault();
-
-      const { x, y } = getPointerPosition(event);
-
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.beginPath();
-      ctx.arc(x, y, 22, 0, Math.PI * 2);
-      ctx.fill();
-
-      checkRevealProgress();
-    }
-
-    function checkRevealProgress(){
-      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-      let transparentPixels = 0;
-
-      for(let i = 3; i < imageData.length; i += 4){
-        if(imageData[i] < 80) transparentPixels++;
-      }
-
-      const totalPixels = canvas.width * canvas.height;
-      const scratchedRatio = transparentPixels / totalPixels;
-
-      if(scratchedRatio > .42){
-        canvas.classList.add("scratched");
-        box.classList.add("revealed");
-      }
-    }
-
-    canvas.addEventListener("mousedown", (event) => {
-      isDrawing = true;
-      scratch(event);
-    });
-
-    window.addEventListener("mouseup", () => {
-      isDrawing = false;
-    });
-
-    canvas.addEventListener("mousemove", scratch);
-
-    canvas.addEventListener("touchstart", (event) => {
-      isDrawing = true;
-      scratch(event);
-    }, { passive:false });
-
-    canvas.addEventListener("touchend", () => {
-      isDrawing = false;
-    });
-
-    canvas.addEventListener("touchmove", scratch, { passive:false });
-
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-  });
-}
-
-setupCountdownScratch();
-    setupWeddingDateScratch();
-
-    const rsvpForm = document.getElementById("rsvpForm");
-    const successMessage = document.getElementById("successMessage");
-
-    rsvpForm.addEventListener("submit", async function(event){
-      event.preventDefault();
-
-      const formData = new FormData(rsvpForm);
-
-      try{
-        const response = await fetch(rsvpForm.action, {
-          method:"POST",
-          body:formData,
-          headers:{
-            "Accept":"application/json"
-          }
-        });
-
-        if(response.ok){
-  window.location.href = "thank-you.html";
-}else{
-          alert("Υπήρξε πρόβλημα με την αποστολή. Δοκιμάστε ξανά.");
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI * 2);
+          ctx.fill();
         }
-      }catch(error){
-        alert("Η φόρμα χρειάζεται σύνδεση με Formspree ή backend για να σταλεί.");
       }
+
+      function getPointerPosition(event){
+        const rect = canvas.getBoundingClientRect();
+        const point = event.touches ? event.touches[0] : event;
+
+        return {
+          x: point.clientX - rect.left,
+          y: point.clientY - rect.top
+        };
+      }
+
+      function scratch(event){
+        if(!isDrawing) return;
+
+        event.preventDefault();
+
+        const position = getPointerPosition(event);
+
+        ctx.globalCompositeOperation = "destination-out";
+        ctx.beginPath();
+        ctx.arc(position.x, position.y, 22, 0, Math.PI * 2);
+        ctx.fill();
+
+        checkRevealProgress();
+      }
+
+      function checkRevealProgress(){
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let transparentPixels = 0;
+
+        for(let i = 3; i < imageData.length; i += 4){
+          if(imageData[i] < 80){
+            transparentPixels++;
+          }
+        }
+
+        const totalPixels = canvas.width * canvas.height;
+        const scratchedRatio = transparentPixels / totalPixels;
+
+        if(scratchedRatio > .42){
+          canvas.classList.add("scratched");
+          box.classList.add("revealed");
+        }
+      }
+
+      canvas.addEventListener("mousedown", function(event){
+        isDrawing = true;
+        scratch(event);
+      });
+
+      window.addEventListener("mouseup", function(){
+        isDrawing = false;
+      });
+
+      canvas.addEventListener("mousemove", scratch);
+
+      canvas.addEventListener("touchstart", function(event){
+        isDrawing = true;
+        scratch(event);
+      }, { passive:false });
+
+      canvas.addEventListener("touchend", function(){
+        isDrawing = false;
+      });
+
+      canvas.addEventListener("touchmove", scratch, { passive:false });
+
+      resizeCanvas();
+
+      window.addEventListener("resize", resizeCanvas);
     });
+  }
+
+  setupCountdownScratch();
+
+
+  /* =========================
+     RSVP FORM + REDIRECT
+  ========================= */
+
+  async function submitRsvpForm(){
+    const rsvpForm = document.getElementById("rsvpForm");
+
+    if(!rsvpForm){
+      alert("Δεν βρέθηκε η φόρμα.");
+      return;
+    }
+
+    if(!rsvpForm.reportValidity()){
+      return;
+    }
+
+    const formData = new FormData(rsvpForm);
+
+    try{
+      const response = await fetch(rsvpForm.action, {
+        method:"POST",
+        body:formData,
+        headers:{
+          "Accept":"application/json"
+        }
+      });
+
+      if(response.ok){
+        window.location.href = "thank-you.html";
+      }else{
+        alert("Υπήρξε πρόβλημα με την αποστολή. Δοκιμάστε ξανά.");
+      }
+    }catch(error){
+      console.error(error);
+      alert("Υπήρξε πρόβλημα με την αποστολή. Δοκιμάστε ξανά.");
+    }
+  }
+
   </script>
 </body>
 </html>
