@@ -1321,9 +1321,8 @@ setupCountdownScratch();
         });
 
         if(response.ok){
-          rsvpForm.reset();
-          successMessage.classList.add("show");
-        }else{
+  window.location.href = "thank-you.html";
+}else{
           alert("Υπήρξε πρόβλημα με την αποστολή. Δοκιμάστε ξανά.");
         }
       }catch(error){
